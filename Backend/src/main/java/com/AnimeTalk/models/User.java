@@ -28,6 +28,8 @@ public class User {
 
     private String email;
 
+    private String gender;
+
     private String password;
 
     private List<Integer> followers = new ArrayList<>();
