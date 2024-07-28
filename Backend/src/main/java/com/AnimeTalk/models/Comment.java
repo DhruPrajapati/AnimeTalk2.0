@@ -10,32 +10,25 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Post {
+@Entity
+public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String caption;
-
-    private String image;
-
-    private String video;
+    private String Content;
 
     @ManyToOne
     private User user;
 
-    @OneToMany
+    @ManyToMany
     private List<User> Liked = new ArrayList<>();
 
     private LocalDateTime createdAt;
-
-    @OneToMany 
-    private List<Comment> comments = new ArrayList<>();
 
 }
