@@ -1,6 +1,8 @@
-package com.AnimeTalk.Service;
+package com.AnimeTalk.ServiceImplementation;
 
 import com.AnimeTalk.Repository.ReelsRepository;
+import com.AnimeTalk.Service.ReelsService;
+import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.Reels;
 import com.AnimeTalk.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReelsServiceImplementation implements ReelsService{
+public class ReelsServiceImplementation implements ReelsService {
 
     @Autowired
     private ReelsRepository reelsRepository;

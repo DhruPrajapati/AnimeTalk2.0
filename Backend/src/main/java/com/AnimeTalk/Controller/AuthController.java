@@ -4,7 +4,7 @@ import com.AnimeTalk.Config.JwtProvider;
 import com.AnimeTalk.Repository.UserRepository;
 import com.AnimeTalk.Request.LoginRequest;
 import com.AnimeTalk.Response.AuthResponse;
-import com.AnimeTalk.Service.CustomUserDetailsService;
+import com.AnimeTalk.ServiceImplementation.CustomUserDetailsService;
 import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.User;
 import org.springframework.beans.factory.annotation.Autowired;

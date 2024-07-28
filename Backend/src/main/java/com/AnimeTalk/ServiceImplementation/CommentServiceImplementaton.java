@@ -1,7 +1,10 @@
-package com.AnimeTalk.Service;
+package com.AnimeTalk.ServiceImplementation;
 
 import com.AnimeTalk.Repository.CommentRepository;
 import com.AnimeTalk.Repository.PostRepository;
+import com.AnimeTalk.Service.CommentService;
+import com.AnimeTalk.Service.PostService;
+import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.Comment;
 import com.AnimeTalk.models.Post;
 import com.AnimeTalk.models.User;
@@ -12,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CommentServiceImplementaton implements CommentService{
+public class CommentServiceImplementaton implements CommentService {
 
     @Autowired
     private PostService postService;

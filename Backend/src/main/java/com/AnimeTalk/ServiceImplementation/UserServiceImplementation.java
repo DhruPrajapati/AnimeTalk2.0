@@ -1,7 +1,8 @@
-package com.AnimeTalk.Service;
+package com.AnimeTalk.ServiceImplementation;
 
 import com.AnimeTalk.Config.JwtProvider;
 import com.AnimeTalk.Repository.UserRepository;
+import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

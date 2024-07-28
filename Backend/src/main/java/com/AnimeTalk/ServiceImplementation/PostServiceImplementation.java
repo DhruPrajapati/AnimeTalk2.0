@@ -1,7 +1,9 @@
-package com.AnimeTalk.Service;
+package com.AnimeTalk.ServiceImplementation;
 
 import com.AnimeTalk.Repository.PostRepository;
 import com.AnimeTalk.Repository.UserRepository;
+import com.AnimeTalk.Service.PostService;
+import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.Post;
 import com.AnimeTalk.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PostServiceImplementation implements PostService{
+public class PostServiceImplementation implements PostService {
 
     @Autowired
     PostRepository postRepository;

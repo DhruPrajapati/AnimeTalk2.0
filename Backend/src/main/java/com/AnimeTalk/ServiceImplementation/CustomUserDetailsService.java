@@ -1,4 +1,4 @@
-package com.AnimeTalk.Service;
+package com.AnimeTalk.ServiceImplementation;
 
 import com.AnimeTalk.Repository.UserRepository;
 import com.AnimeTalk.models.User;
