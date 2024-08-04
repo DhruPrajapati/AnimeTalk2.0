@@ -1,5 +1,6 @@
 package com.AnimeTalk.ServiceImplementation;
 
+import com.AnimeTalk.Exception.ChatException;
 import com.AnimeTalk.Repository.ChatRepository;
 import com.AnimeTalk.Service.ChatService;
 import com.AnimeTalk.models.Chat;
@@ -33,11 +34,11 @@ public class ChatServiceImplementation implements ChatService {
     }
 
     @Override
-    public Chat findChatById(Integer chatId) throws Exception {
+    public Chat findChatById(Integer chatId) throws ChatException {
         Optional<Chat> opt = chatRepository.findById(chatId);
 
         if(opt.isEmpty())
-            throw new Exception("Chat not Found With id - "+chatId);
+            throw new ChatException("Chat not Found With id - "+chatId);
 
         return opt.get();
     }

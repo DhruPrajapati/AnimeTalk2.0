@@ -1,6 +1,7 @@
 package com.AnimeTalk.ServiceImplementation;
 
 import com.AnimeTalk.Config.JwtProvider;
+import com.AnimeTalk.Exception.UserException;
 import com.AnimeTalk.Repository.UserRepository;
 import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.User;
@@ -17,12 +18,12 @@ public class UserServiceImplementation implements UserService {
     UserRepository userRepository;
 
     @Override
-    public User findUserById(Integer userId) throws Exception {
+    public User findUserById(Integer userId) throws UserException {
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
             return user.get();
         }
-        throw new Exception("user not Exist with UserId "+userId);
+        throw new UserException("user not Exist with UserId "+userId);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User followUser(Integer reqUserId, Integer userId2) throws Exception {
+    public User followUser(Integer reqUserId, Integer userId2) throws UserException {
         User reqUser = findUserById(reqUserId);
 
         User user2 =  findUserById(userId2);
@@ -47,11 +48,11 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User updateUser(User user, Integer userId)  throws Exception{
+    public User updateUser(User user, Integer userId)  throws UserException{
         Optional<User> userExist = userRepository.findById(userId);
 
         if(userExist.isEmpty())
-            throw  new Exception("User does not exist with id "+userId);
+            throw  new UserException("User does not exist with id "+userId);
 
 
         User oldUser = userExist.get();

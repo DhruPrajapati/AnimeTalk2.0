@@ -1,5 +1,7 @@
 package com.AnimeTalk.Controller;
 
+import com.AnimeTalk.Exception.ReelException;
+import com.AnimeTalk.Exception.UserException;
 import com.AnimeTalk.Service.ReelsService;
 import com.AnimeTalk.Service.UserService;
 import com.AnimeTalk.models.Reels;
@@ -32,7 +34,7 @@ public class ReelsController {
     }
 
     @GetMapping("/api/reels/user/{userId}")
-    public List<Reels> findUsersReels(@PathVariable Integer userId) throws Exception{
+    public List<Reels> findUsersReels(@PathVariable Integer userId) throws ReelException, UserException {
         List<Reels>  reels= reelsService.findUsersReels(userId);
         return reels;
     }

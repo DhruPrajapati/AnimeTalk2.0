@@ -1,5 +1,7 @@
 package com.AnimeTalk.ServiceImplementation;
 
+import com.AnimeTalk.Exception.StoryException;
+import com.AnimeTalk.Exception.UserException;
 import com.AnimeTalk.Repository.StoryRepository;
 import com.AnimeTalk.Service.StoryService;
 import com.AnimeTalk.Service.UserService;
@@ -32,7 +34,7 @@ public class StoryServiceImplementation  implements StoryService {
     }
 
     @Override
-    public List<Story> findStoryByUserId(Integer userId) throws Exception {
+    public List<Story> findStoryByUserId(Integer userId) throws StoryException, UserException {
         User user = userService.findUserById(userId);
 
         return storyRepository.findByUserId(userId);

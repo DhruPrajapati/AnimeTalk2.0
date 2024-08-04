@@ -1,5 +1,8 @@
 package com.AnimeTalk.ServiceImplementation;
 
+import com.AnimeTalk.Exception.CommentExpection;
+import com.AnimeTalk.Exception.PostException;
+import com.AnimeTalk.Exception.UserException;
 import com.AnimeTalk.Repository.CommentRepository;
 import com.AnimeTalk.Repository.PostRepository;
 import com.AnimeTalk.Service.CommentService;
@@ -30,7 +33,7 @@ public class CommentServiceImplementaton implements CommentService {
     private PostRepository postRepository;
 
     @Override
-    public Comment createComment(Comment comment, Integer postId, Integer userId) throws Exception{
+    public Comment createComment(Comment comment, Integer postId, Integer userId) throws CommentExpection, PostException, UserException {
 
         User user = userService.findUserById(userId);
 
@@ -50,7 +53,7 @@ public class CommentServiceImplementaton implements CommentService {
     }
 
     @Override
-    public Comment likeComments(Integer commentId, Integer userId) throws Exception{
+    public Comment likeComments(Integer commentId, Integer userId) throws CommentExpection, UserException {
         Comment comment = findCommentById(commentId);
         User user = userService.findUserById(userId);
 
@@ -63,11 +66,11 @@ public class CommentServiceImplementaton implements CommentService {
     }
 
     @Override
-    public Comment findCommentById(Integer commentId) throws Exception{
+    public Comment findCommentById(Integer commentId) throws CommentExpection{
         Optional<Comment> opt = commentRepository.findById(commentId);
 
         if(opt.isEmpty())
-            throw new Exception("Comment does not exits");
+            throw new CommentExpection("Comment does not exits");
 
         return opt.get();
     }

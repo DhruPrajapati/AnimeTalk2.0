@@ -1,5 +1,6 @@
 package com.AnimeTalk.ServiceImplementation;
 
+import com.AnimeTalk.Exception.MessageException;
 import com.AnimeTalk.Repository.ChatRepository;
 import com.AnimeTalk.Repository.MessageRepository;
 import com.AnimeTalk.Service.ChatService;

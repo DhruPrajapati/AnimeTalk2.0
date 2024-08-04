@@ -1,5 +1,6 @@
 package com.AnimeTalk.Service;
 
+import com.AnimeTalk.Exception.MessageException;
 import com.AnimeTalk.models.Chat;
 import com.AnimeTalk.models.Message;
 import com.AnimeTalk.models.User;

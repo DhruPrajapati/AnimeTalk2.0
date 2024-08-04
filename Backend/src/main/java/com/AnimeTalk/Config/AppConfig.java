@@ -43,7 +43,7 @@ public class AppConfig {
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
-                cfg.setExposedHeaders(Arrays.asList( "Authorizati on"));
+                cfg.setExposedHeaders(Arrays.asList( "Authorization"));
                 cfg.setMaxAge(3600L);
                 return cfg;
             }

@@ -1,5 +1,7 @@
 package com.AnimeTalk.ServiceImplementation;
 
+import com.AnimeTalk.Exception.ReelException;
+import com.AnimeTalk.Exception.UserException;
 import com.AnimeTalk.Repository.ReelsRepository;
 import com.AnimeTalk.Service.ReelsService;
 import com.AnimeTalk.Service.UserService;
@@ -35,7 +37,7 @@ public class ReelsServiceImplementation implements ReelsService {
     }
 
     @Override
-    public List<Reels> findUsersReels(Integer userId) throws Exception{
+    public List<Reels> findUsersReels(Integer userId) throws ReelException, UserException {
         userService.findUserById(userId);
 
         return reelsRepository.findByUserId(userId);
