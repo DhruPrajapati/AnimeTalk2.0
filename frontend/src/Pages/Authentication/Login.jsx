@@ -1,10 +1,13 @@
 import { Button, TextField } from "@mui/material";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { Fragment, useState } from "react";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
+import { loginUserAction } from "../../Redux/Actions/authAction";
 
 const Login = () => {
   const [formValue, setFormValue] = useState();
+  const dispatch = useDispatch()
 
   const initialValues = { email: "", password: "" };
 
@@ -15,8 +18,10 @@ const Login = () => {
       .required("Password Required"),
   };
 
-  const handleSubmit = () => {
-    console.log("handle submit");
+  const handleSubmit = (values) => {
+    console.log("handle submit",values);
+    dispatch(loginUserAction({data:values}))
+
   };
   return (
     <Fragment>

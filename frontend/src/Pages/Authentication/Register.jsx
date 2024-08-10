@@ -8,9 +8,12 @@ import {
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { Fragment, useState } from "react";
 import * as Yup from "yup";
+import { registerUserAction } from "../../Redux/Actions/authAction";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
   const [gender, setGender] = useState("");
+  const dispatch = useDispatch();
 
   const initialValues = {
     firstName: "",
@@ -30,6 +33,7 @@ const Register = () => {
   const handleSubmit = (values) => {
     values.gender = gender;
     console.log("handle submit ", values);
+    dispatch(registerUserAction({ data: values }));
   };
 
   const handleChange = (e) => {
