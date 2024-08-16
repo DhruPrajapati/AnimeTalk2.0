@@ -37,7 +37,7 @@ const PostCard = () => {
       <CardMedia
         component="img"
         height="194"
-        image="https://cdn.pixabay.com/photo/2024/07/25/09/52/farmer-8920644_640.jpg"
+        image="https://staticg.sportskeeda.com/editor/2023/08/3626c-16921875120044-1920.jpg"
         alt="Paella dish"
       />
       <CardContent>

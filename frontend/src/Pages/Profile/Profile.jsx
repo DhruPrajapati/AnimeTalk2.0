@@ -1,6 +1,8 @@
-import { Avatar, Box, Button, Tab, Tabs } from "@mui/material";
+import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
+import PostCard from "../../Components/Post/PostCard";
+import UserReelCard from "../../Components/Reels/UserReelCard";
 
 const Profile = () => {
   const { id } = useParams();
@@ -12,12 +14,15 @@ const Profile = () => {
   ];
 
   const [value, setValue] = React.useState("post");
+  const posts = [1, 1, 1, 1, 1];
+  const reels = [1, 1, 1, 1, 1];
+  const savedPost = [1, 1, 1, 1, 1];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
-    <div className="py-10 w-[70%]">
+    <Card className="my-10 w-[70%]">
       <div className="rounded-md">
         <div className="h-[15rem]">
           <img
@@ -67,9 +72,36 @@ const Profile = () => {
               ))}
             </Tabs>
           </Box>
+          <div className="flex justify-center ">
+            {value === "post" ? (
+              <div className="space-y-5 w-[70%] my-10">
+                {posts.map((item) => (
+                  <div className="border border-slate-100 rounded-md">
+                    <PostCard />
+                  </div>
+                ))}
+              </div>
+            ) : value === "reels" ? (
+              <div className="flex flex-wrap justify-center gap-2 my-10">
+                {reels.map((item) => (
+                  <UserReelCard />
+                ))}
+              </div>
+            ) : value === "saved" ? (
+              <div className="space-y-5 w-[70%] my-10">
+                {savedPost.map((item) => (
+                  <div className="border border-slate-100 rounded-md">
+                    <PostCard />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div>Repost</div>
+            )}
+          </div>
         </section>
       </div>
-    </div>
+    </Card>
   );
 };
 

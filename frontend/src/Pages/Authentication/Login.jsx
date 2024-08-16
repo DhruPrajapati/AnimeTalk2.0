@@ -4,10 +4,12 @@ import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { loginUserAction } from "../../Redux/Actions/authAction";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formValue, setFormValue] = useState();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialValues = { email: "", password: "" };
 
@@ -19,9 +21,8 @@ const Login = () => {
   };
 
   const handleSubmit = (values) => {
-    console.log("handle submit",values);
-    dispatch(loginUserAction({data:values}))
-
+    console.log("handle submit", values);
+    dispatch(loginUserAction({ data: values }));
   };
   return (
     <Fragment>
@@ -63,7 +64,7 @@ const Login = () => {
             </div>
             <Button
               sx={{ padding: ".8rem 0rem" }}
-              fullWidth 
+              fullWidth
               type="submit"
               variant="contained"
               color="primary">
@@ -72,6 +73,10 @@ const Login = () => {
           </div>
         </Form>
       </Formik>
+      <div className="flex gap-2 items-center justify-center pt-5">
+        <p>If you don't have account ?</p>
+        <Button onClick={() => navigate("/register")}>Register</Button>
+      </div>
     </Fragment>
   );
 };

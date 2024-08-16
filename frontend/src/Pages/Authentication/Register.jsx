@@ -10,10 +10,12 @@ import React, { Fragment, useState } from "react";
 import * as Yup from "yup";
 import { registerUserAction } from "../../Redux/Actions/authAction";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [gender, setGender] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialValues = {
     firstName: "",
@@ -143,6 +145,10 @@ const Register = () => {
           </div>
         </Form>
       </Formik>
+      <div className="flex gap-2 items-center justify-center pt-5">
+        <p>If you already have account ?</p>
+        <Button onClick={() => navigate("/login")}>Login</Button>
+      </div>
     </Fragment>
   );
 };
