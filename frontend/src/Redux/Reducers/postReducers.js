@@ -1,5 +1,6 @@
 import { SatelliteAlt } from "@mui/icons-material";
 import {
+  CREATE_COMMENT_SUCCESS,
   CREATE_POST_FAILURE,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
@@ -17,6 +18,8 @@ const initialState = {
   error: null,
   posts: [],
   like: null,
+  comments: [],
+  newcomment: null,
 };
 
 const postReducers = (state = initialState, action) => {
@@ -30,21 +33,35 @@ const postReducers = (state = initialState, action) => {
       return {
         ...state,
         post: action.payload,
-        posts: [action.payload, ...state.post],
+        posts: [action.payload, ...state.posts],
         loading: false,
         error: null,
       };
 
     case GET_ALL_POST_SUCCESS:
-      return { ...state, posts: action.payload, loading: false, error: null };
+      return {
+        ...state,
+        posts: action.payload,
+        comments: action.payload.comments,
+        loading: false,
+        error: null,
+      };
 
     case LIKE_POST_SUCCESS:
       return {
         ...state,
         like: action.payload,
         posts: state.posts.map((item) =>
-          item.id === action.payload ? action.payload : item
+          item.id === action.payload.id ? action.payload : item
         ),
+        loading: false,
+        error: null,
+      };
+
+    case CREATE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        newcomment: action.payload,
         loading: false,
         error: null,
       };

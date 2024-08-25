@@ -12,7 +12,6 @@ import {
   IconButton,
 } from "@mui/material";
 
-
 import uploadToCloudinary from "../../Utils/uploadToCloudinary";
 import { useDispatch } from "react-redux";
 import { createPostAction } from "../../Redux/Actions/postAction";
@@ -34,7 +33,7 @@ export default function CreatePostModal({ open, handleClose }) {
   const [selectedImage, setSelectedImage] = React.useState();
   const [selectedVideo, setSelectedVideo] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleSelectImage = async (event) => {
     setIsLoading(true);
@@ -84,7 +83,7 @@ export default function CreatePostModal({ open, handleClose }) {
               <textarea
                 className="outline-none w-full mt-5 p-2 bg-transparent border border-[#3b4054] rounded-sm "
                 placeholder="write caption..."
-                name="Caption"
+                name="caption"
                 id=""
                 value={formik.caption}
                 onChange={formik.handleChange}

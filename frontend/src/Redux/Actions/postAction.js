@@ -1,4 +1,7 @@
 import {
+  CREATE_COMMENT_FAILURE,
+  CREATE_COMMENT_REQUEST,
+  CREATE_COMMENT_SUCCESS,
   CREATE_POST_FAILURE,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
@@ -61,11 +64,29 @@ export const likePostAction = (postId) => async (dispatch) => {
     type: LIKE_POST_REQUEST,
   });
   try {
-    const { data } = await api.get(`/api/posts/like/${postId}`);
+    const { data } = await api.put(`/api/posts/like/${postId}`);
     dispatch({ type: LIKE_POST_SUCCESS, payload: data });
     console.log("get user Post", data);
   } catch (error) {
     console.log("error", error);
     dispatch({ type: LIKE_POST_FAILURE, payload: error });
+  }
+};
+
+export const createCommentAction = (reqData) => async (dispatch) => {
+  console.log(reqData);
+  dispatch({
+    type: CREATE_COMMENT_REQUEST,
+  });
+  try {
+    const { data } = await api.post(
+      `/api/comment/post/${reqData.postId}`,
+      reqData.data
+    );
+    dispatch({ type: CREATE_COMMENT_SUCCESS, payload: data });
+    console.log("created comment", data);
+  } catch (error) {
+    console.log("error", error);
+    dispatch({ type: CREATE_COMMENT_FAILURE, payload: error });
   }
 };

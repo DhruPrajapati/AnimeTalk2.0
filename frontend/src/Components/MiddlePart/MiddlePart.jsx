@@ -22,7 +22,7 @@ const MiddlePart = () => {
 
   useEffect(() => {
     dispatch(getAllPostAction());
-  }, []);
+  }, [post.newcomment]);
 
   return (
     <div className="px-20">
