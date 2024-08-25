@@ -1,18 +1,28 @@
 import { Avatar, Card, IconButton } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import AddCircleIcon from "@mui/icons-material/Add";
 import StoryCircle from "./StoryCircle";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ArticleIcon from "@mui/icons-material/Article";
 import PostCard from "../Post/PostCard";
+import CreatePostModal from "../CreatePost/CreatePostModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPostAction } from "../../Redux/Actions/postAction";
 
 const MiddlePart = () => {
   const story = [1, 1, 1, 1, 1];
   const posts = [1, 1, 1, 1, 1];
-  const handleOpenCreatePostModal = () => {
-    console.log("open post modal");
-  };
+  const dispatch = useDispatch();
+  const { post } = useSelector((store) => store);
+  console.log("post store", post);
+  const [open, setOpen] = React.useState(false);
+  const handleOpenCreatePostModal = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    dispatch(getAllPostAction());
+  }, []);
 
   return (
     <div className="px-20">
@@ -34,6 +44,7 @@ const MiddlePart = () => {
             type="text"
             readOnly
             className="outline-none w-[90%] rounded-full px-5 bg-transparent border-[#3b4054] border"
+            onClick={handleOpenCreatePostModal}
           />
         </div>
         <div className="flex justify-center space-x-9 mt-5">
@@ -58,9 +69,14 @@ const MiddlePart = () => {
         </div>
       </Card>
       <div className=" mt-5 space-y-5">
-        {posts.map((item) => (
-          <PostCard />
+        {post.posts.map((item) => (
+          <PostCard item={item} />
         ))}
+      </div>
+      <div>
+        <CreatePostModal
+          open={open}
+          handleClose={handleClose}></CreatePostModal>
       </div>
     </div>
   );

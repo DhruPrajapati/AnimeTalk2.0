@@ -1,26 +1,32 @@
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import React from "react";
-import { useParams } from "react-router-dom";
 import PostCard from "../../Components/Post/PostCard";
 import UserReelCard from "../../Components/Reels/UserReelCard";
+import { useSelector } from "react-redux";
+import ProfileModal from "./ProfileModal";
 
 const Profile = () => {
-  const { id } = useParams();
   const tabs = [
     { value: "post", name: "Post" },
     { value: "reels", name: "Reels" },
     { value: "saved", name: "Saved" },
     { value: "repost", name: "Repost" },
   ];
-
-  const [value, setValue] = React.useState("post");
   const posts = [1, 1, 1, 1, 1];
   const reels = [1, 1, 1, 1, 1];
   const savedPost = [1, 1, 1, 1, 1];
 
+  const [value, setValue] = React.useState("post");
+  const { auth } = useSelector((store) => store);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpenProfileModal = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <Card className="my-10 w-[70%]">
       <div className="rounded-md">
@@ -38,7 +44,10 @@ const Profile = () => {
             src="https://s1.zerochan.net/Uchiha.Itachi.600.3175530.jpg"
           />
           {true ? (
-            <Button sx={{ borderRadius: "20px" }} variant="outlined">
+            <Button
+              onClick={handleOpenProfileModal}
+              sx={{ borderRadius: "20px" }}
+              variant="outlined">
               Edit Profile
             </Button>
           ) : (
@@ -49,8 +58,13 @@ const Profile = () => {
         </div>
         <div className="p-5">
           <div className="py-1 font-bold text-x1">
-            <h1>Dhru Prajapati</h1>
-            <p>@dhruprajapati</p>
+            <h1>{auth.user?.firstName + " " + auth.user?.lastName}</h1>
+            <p>
+              @
+              {auth.user?.firstName.toLowerCase() +
+                "_" +
+                auth.user?.lastName.toLowerCase()}
+            </p>
           </div>
           <div className="flex gap-5 items-center py-3">
             <span>41 post</span>
@@ -101,6 +115,9 @@ const Profile = () => {
           </div>
         </section>
       </div>
+      <section>
+        <ProfileModal open={open} handleClose={handleClose} />
+      </section>
     </Card>
   );
 };
