@@ -1,12 +1,21 @@
 import { Avatar, Card, CardHeader } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { searchUser } from "../../Redux/Actions/authAction";
+import { createChat } from "../../Redux/Actions/messageAction";
 
 const SearchUser = () => {
-  const handleSearchUser = () => {
+  const [username, setUsername] = useState("");
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
+
+  const handleSearchUser = (e) => {
+    setUsername(e.target.value);
     console.log("handle search ");
+    dispatch(searchUser(username));
   };
   const handleClick = (id) => {
-    console.log(id);
+    dispatch(createChat({userId:id}))
   };
 
   return (
@@ -18,21 +27,27 @@ const SearchUser = () => {
           onChange={handleSearchUser}
           type="text"
         />
+        {username &&
+          auth.searchUser.map((item) => (
+            <Card key={item.id} className="absolute w-full z-10 top-[4.5rem]">
+              <CardHeader
+                onClick={() => {
+                  handleClick(item.id);
+                  setUsername("");
+                }}
+                avatar={
+                  <Avatar src="https://cache.desktopnexus.com/thumbseg/1965/1965047-bigthumbnail.jpg" />
+                }
+                title={item.firstName + " " + item.lastName}
+                subheader={
+                  item.firstName.toLowerCase() +
+                  " " +
+                  item.lastName.toLowerCase()
+                }
+              />
+            </Card>
+          ))}
       </div>
-      {false && (
-        <Card>
-          <CardHeader
-            onClick={() => {
-              handleClick();
-            }}
-            avatar={
-              <Avatar src="https://cache.desktopnexus.com/thumbseg/1965/1965047-bigthumbnail.jpg" />
-            }
-            title="Dhru Prajapati"
-            subheader={"codewithDhru"}
-          />
-        </Card>
-      )}
     </div>
   );
 };
