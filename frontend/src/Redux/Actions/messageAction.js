@@ -11,11 +11,15 @@ import {
   GET_ALL_CHATS_SUCCESS,
 } from "../Constant/messageContant";
 
-export const createMessage = (message) => async (dispatch) => {
+export const createMessage = (reqData) => async (dispatch) => {
   dispatch({ type: CREATE_MESSAGE_REQUEST });
   try {
-    const { data } = await api.post(`/api/messages/chat/${message.chatId} `, message);
+    const { data } = await api.post(
+      `/api/messages/chat/${reqData.message.chatId} `,
+      reqData.message
+    );
 
+    reqData.sendMessageToServer(data);
     console.log("created message", data);
 
     dispatch({ type: CREATE_MESSAGE_SUCCESS, payload: data });
@@ -47,7 +51,7 @@ export const createChat = (chat) => async (dispatch) => {
 export const getAllChats = () => async (dispatch) => {
   dispatch({ type: GET_ALL_CHATS_REQUEST });
   try {
-    const { data } = await api.get(`/api/chats`, );
+    const { data } = await api.get(`/api/chats` );
 
     console.log("get all chats", data);
 

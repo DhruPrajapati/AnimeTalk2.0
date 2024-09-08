@@ -9,7 +9,7 @@ import AddIcCallIcon from "@mui/icons-material/AddIcCall";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import WestIcon from "@mui/icons-material/West";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchUser from "../../Components/SearchUser/SearchUser";
 import UserChatCard from "./UserChatCard";
 import ChatMessage from "./ChatMessage";
@@ -17,22 +17,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { createMessage, getAllChats } from "../../Redux/Actions/messageAction";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import uploadToCloudinary from "../../Utils/uploadToCloudinary";
+import SockJS from "sockjs-client";
+import { API_BASE_URL } from "../../Config/api";
+import Stomp from "stompjs"; // Fixed typo here
 
 const Message = () => {
   const dispatch = useDispatch();
   const { message, auth } = useSelector((store) => store);
   const [currentChat, setCurrentChat] = useState();
-
   const [messages, setMessages] = useState([]);
   const [selectedImage, setSelectedImage] = useState();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    dispatch(getAllChats());
-  }, []);
-
-  console.log("message -------", message.chats);
-  console.log("messagesssss -------", messages);
+  const [stompClient, setStompClient] = useState(null);
+  const chatContainerRef = useRef(null);
 
   const handleSelectImage = async (e) => {
     setLoading(true);
@@ -48,12 +45,80 @@ const Message = () => {
       content: value,
       image: selectedImage,
     };
-    dispatch(createMessage(message));
+    dispatch(createMessage({ message, sendMessageToServer }));
+  };
+
+  const onErr = (error) => {
+    console.log("WebSocket error: ", error);
+  };
+
+  const sendMessageToServer = (newMessage) => {
+    if (stompClient && newMessage) {
+      stompClient.send(
+        `/app/chat/${currentChat?.id}`,
+        {},
+        JSON.stringify(newMessage)
+      );
+    }
+  };
+
+  const onMessageReceived = (payload) => {
+    console.log("payload", payload);
+    const receivedMessage = JSON.parse(payload.body);
+    console.log("Message received from WebSocket: ", receivedMessage);
+
+    setMessages((prevMessages) => [...prevMessages, receivedMessage]); // Correct state update
   };
 
   useEffect(() => {
-    setMessages([...messages, message.message]);
+    dispatch(getAllChats());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (message.message) {
+      setMessages((prevMessages) => [...prevMessages, message.message]); // Correct state update
+    }
   }, [message.message]);
+
+  useEffect(() => {
+    const sock = new SockJS(`${API_BASE_URL}/ws`);
+    const stomp = Stomp.over(sock); // Fixed typo here
+    stomp.connect(
+      {},
+      () => {
+        console.log("WebSocket Connected...");
+        setStompClient(stomp);
+      },
+      onErr
+    );
+
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect(() => {
+          console.log("WebSocket Disconnected");
+        });
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (stompClient && auth.user && currentChat) {
+      const subscription = stompClient.subscribe(
+        `/user/${currentChat.id}/private`,
+        onMessageReceived
+      );
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [stompClient, auth.user, currentChat]);
+
+  useEffect(() => {
+    if (chatContainerRef.current)
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+  }, [message]);
 
   return (
     <div>
@@ -66,18 +131,19 @@ const Message = () => {
                 <h1 className="text-xl font-bold">Home</h1>
               </div>
               <div className="h-[83vh]">
-                <div className="">
-                  <SearchUser />
-                </div>
-                <div className="h-full space-y-4 mt-5 overflow-y-scroll hideScrollBar">
+                <SearchUser />
+                <div
+                  ref={chatContainerRef}
+                  className="h-full space-y-4 mt-5 overflow-y-scroll hideScrollBar">
                   {message.chats.map((item) => (
                     <div
+                      key={item.id}
                       onClick={() => {
                         setCurrentChat(item);
-                        console.log("item ", item);
+                        console.log("Selected chat: ", item);
                         setMessages(item.messages);
                       }}>
-                      <UserChatCard key={item.id} chat={item} />
+                      <UserChatCard chat={item} />
                     </div>
                   ))}
                 </div>
@@ -90,15 +156,11 @@ const Message = () => {
             <div>
               <div className="flex justify-between items-center border-l p-5">
                 <div className="flex items-center space-x-3">
-                  <Avatar src=" https://cache.desktopnexus.com/thumbseg/1965/1965047-bigthumbnail.jpg" />
+                  <Avatar src="https://cache.desktopnexus.com/thumbseg/1965/1965047-bigthumbnail.jpg" />
                   <p>
                     {auth.user.id === currentChat.users[0]?.id
-                      ? currentChat.users[1].firstName +
-                        " " +
-                        currentChat.users[1].lastName
-                      : currentChat.users[0].firstName +
-                        " " +
-                        currentChat.users[0].lastName}
+                      ? `${currentChat.users[1].firstName} ${currentChat.users[1].lastName}`
+                      : `${currentChat.users[0].firstName} ${currentChat.users[0].lastName}`}
                   </p>
                 </div>
                 <div className="flex space-x-3">
@@ -114,9 +176,8 @@ const Message = () => {
                 {messages.map((item) => (
                   <ChatMessage key={item.id} item={item} />
                 ))}
-                {/* <ChatMessage /> */}
               </div>
-              <div className="sticky botton-0 border-l">
+              <div className="sticky bottom-0 border-l">
                 <div className="py-5 flex items-center justify-center space-x-5">
                   {selectedImage && (
                     <img
@@ -136,7 +197,7 @@ const Message = () => {
                       }
                     }}
                   />
-                  <div className="">
+                  <div>
                     <input
                       className="hidden"
                       type="file"
